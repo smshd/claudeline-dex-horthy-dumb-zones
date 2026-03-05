@@ -45,7 +45,8 @@ const (
 	cacheTTLFail = 15 * time.Second
 	usageURL     = "https://api.anthropic.com/api/oauth/usage"
 	httpTimeout  = 5 * time.Second
-	barWidth     = 5
+	barWidth        = 5
+	contextBarWidth = 10
 )
 
 var debugLogFile = filepath.Join(os.TempDir(), "claudeline-debug.log")
@@ -189,7 +190,7 @@ func run(cfg config) error {
 		compactPct = v
 	}
 	warnPct := compactPct - 5
-	contextBar := bar(contextPct, contextColorFunc(warnPct))
+	contextBar := barN(contextPct, contextBarWidth, contextColorFunc(warnPct))
 	if contextPct >= warnPct {
 		contextBar += " " + yellow + "⚠" + ansiReset
 	}
@@ -272,14 +273,16 @@ func planName(subType string) string {
 	}
 }
 
-// contextColorFunc returns a color function for context usage that turns red
-// at the given warning percentage (compaction threshold minus margin).
+// contextColorFunc returns a color function for context usage.
+// Green ≤40%, yellow 41-60%, red >60% (with override at compaction warning).
 func contextColorFunc(warnPct int) func(int) string {
 	return func(pct int) string {
 		switch {
 		case pct >= warnPct:
 			return red
-		case pct >= 70:
+		case pct > 60:
+			return red
+		case pct > 40:
 			return yellow
 		default:
 			return green
@@ -299,11 +302,11 @@ func quotaColor(pct int) string {
 	}
 }
 
-// bar renders a progress bar with ANSI colors.
-func bar(pct int, colorFn func(int) string) string {
+// barN renders a progress bar of a given width with ANSI colors.
+func barN(pct int, width int, colorFn func(int) string) string {
 	pct = max(0, min(100, pct))
-	filled := pct * barWidth / 100
-	empty := barWidth - filled
+	filled := pct * width / 100
+	empty := width - filled
 	color := colorFn(pct)
 
 	return fmt.Sprintf(
@@ -312,6 +315,11 @@ func bar(pct int, colorFn func(int) string) string {
 		dim, strings.Repeat("░", empty),
 		ansiReset, pct,
 	)
+}
+
+// bar renders a progress bar with the default width.
+func bar(pct int, colorFn func(int) string) string {
+	return barN(pct, barWidth, colorFn)
 }
 
 // formatLocalTime parses an ISO 8601 timestamp and formats it in the local timezone.

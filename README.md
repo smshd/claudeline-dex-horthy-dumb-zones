@@ -1,8 +1,8 @@
-# claudeline (smshd fork)
+# claudeline-dumb-zones
 
 A fork of [fredrikaverpil/claudeline](https://github.com/fredrikaverpil/claudeline) — a minimalistic Claude Code status line written in Go.
 
-This fork tweaks the context window progress bar to better suit how we work with long Claude Code sessions.
+This fork tweaks the context window progress bar based on [Dex Horthy's](https://www.youtube.com/watch?v=rmvDxxNubIg&t=493s) "Dumb Zone" concept — giving you earlier visual warnings so you stay in the smart zone during long Claude Code sessions.
 
 ## What we changed (and why)
 
@@ -16,7 +16,7 @@ The context window is the single most important thing to keep an eye on during a
 
 Stock claudeline stays green until 70%, then yellow, then red near compaction. By 70% you're already deep in what we call the **Dumb Zone** — and it's too late to course-correct.
 
-The concept comes from [this video by Dex](https://www.youtube.com/watch?v=rmvDxxNubIg&t=493s): your context window has roughly 168,000 tokens, and around the 40% mark you start getting diminishing returns. The more of the window you've used up, the worse the model performs. If your context is packed with MCP JSON dumps, file searches, test output, and UUIDs, you're doing all your actual work in the zone where the model is least capable.
+The concept comes from [Dex Horthy](https://www.youtube.com/watch?v=rmvDxxNubIg&t=493s): your context window has roughly 168,000 tokens, and around the 40% mark you start getting diminishing returns. The more of the window you've used up, the worse the model performs. If your context is packed with MCP JSON dumps, file searches, test output, and UUIDs, you're doing all your actual work in the zone where the model is least capable.
 
 The fix is **intentional compaction** — regularly compressing your context before you hit that zone. You condense your working state into a markdown summary (specific files, line numbers, decisions made, the problem being solved), then start a fresh context window. The new session picks up from the summary and works in the "smart zone" instead of wading through stale noise.
 
@@ -39,8 +39,8 @@ All other features — subscription plan label, 5-hour/7-day quota bars, git bra
 1. Clone and build:
 
 ```bash
-git clone https://github.com/smshd/claudeline.git
-cd claudeline
+git clone https://github.com/smshd/claudeline-dumb-zones.git
+cd claudeline-dumb-zones
 go build -o ~/.local/bin/claudeline .
 ```
 
@@ -76,7 +76,8 @@ go build -o ~/.local/bin/claudeline .
 
 ## Credits
 
-Forked from [claudeline](https://github.com/fredrikaverpil/claudeline) by [@fredrikaverpil](https://github.com/fredrikaverpil). All the hard work (OAuth, usage API, caching, Go architecture) is theirs.
+- [claudeline](https://github.com/fredrikaverpil/claudeline) by [@fredrikaverpil](https://github.com/fredrikaverpil) — all the hard work (OAuth, usage API, caching, Go architecture) is theirs
+- [Dex Horthy](https://www.youtube.com/watch?v=rmvDxxNubIg&t=493s) — the Dumb Zone concept that inspired our threshold changes
 
 ---
 

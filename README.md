@@ -10,10 +10,7 @@ This fork tweaks the context window progress bar to better suit how we work with
 
 The context window is the single most important thing to keep an eye on during a session. A wider bar makes it easier to gauge at a glance — especially when you're deep in a task and only catching the status line in your peripheral vision.
 
-```
-Stock:  ██░░░ 35%
-Ours:   ███░░░░░░░ 35%
-```
+![Comparison of stock vs fork status bars](docs/comparison.png)
 
 ### Earlier color thresholds (the "Dumb Zone")
 

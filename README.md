@@ -22,11 +22,11 @@ The fix is **intentional compaction** — regularly compressing your context bef
 
 Our thresholds are designed around this workflow:
 
-| Range | Color | Meaning |
-|-------|-------|---------|
-| 0–40% | Green | Smart zone — full performance, work freely |
-| 41–60% | Yellow | Approaching the dumb zone — wrap up your current task or compact |
-| 61%+ | Red | In the dumb zone — compact now or start fresh |
+| Range | Color | Zone | Meaning |
+|-------|-------|------|---------|
+| 0–40% | Green | Smart zone | Full performance, work freely |
+| 41–60% | Yellow | Dumb zone | Wrap up your current task or compact |
+| 61%+ | Red | Danger zone | You really don't want to get here — compact now or start fresh |
 
 The compaction warning (`⚠`) from upstream still triggers at 80% as a final alert.
 
